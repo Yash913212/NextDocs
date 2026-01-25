@@ -1,0 +1,272 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "NextDocs API",
+    "description": "API documentation for NextDocs platform",
+    "version": "1.0.0",
+    "contact": {
+      "name": "NextDocs Support",
+      "url": "https://nextdocs.example.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.nextdocs.example.com/v1",
+      "description": "Production API"
+    },
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": "Local Development"
+    }
+  ],
+  "paths": {
+    "/docs": {
+      "get": {
+        "summary": "List all documentation pages",
+        "description": "Retrieve a list of all available documentation pages",
+        "operationId": "listDocs",
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "Language locale (en, es, fr, de)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["en", "es", "fr", "de"],
+              "default": "en"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "description": "Documentation version",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["v1", "v2", "v3"],
+              "default": "v1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Doc"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/docs/{slug}": {
+      "get": {
+        "summary": "Get a specific documentation page",
+        "description": "Retrieve a specific documentation page by slug",
+        "operationId": "getDoc",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "Document slug identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "Language locale",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["en", "es", "fr", "de"],
+              "default": "en"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "description": "Documentation version",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["v1", "v2", "v3"],
+              "default": "v1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Doc"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Document not found"
+          }
+        }
+      }
+    },
+    "/search": {
+      "get": {
+        "summary": "Search documentation",
+        "description": "Search across all documentation content",
+        "operationId": "searchDocs",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Search query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "Language locale",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["en", "es", "fr", "de"],
+              "default": "en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SearchResult"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/feedback": {
+      "post": {
+        "summary": "Submit feedback",
+        "description": "Submit user feedback about documentation",
+        "operationId": "submitFeedback",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Feedback"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Feedback received successfully"
+          },
+          "400": {
+            "description": "Invalid request"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Doc": {
+        "type": "object",
+        "required": ["slug", "title", "content", "metadata"],
+        "properties": {
+          "slug": {
+            "type": "string",
+            "description": "Document identifier"
+          },
+          "title": {
+            "type": "string",
+            "description": "Document title"
+          },
+          "description": {
+            "type": "string",
+            "description": "Document description"
+          },
+          "content": {
+            "type": "string",
+            "description": "Markdown content"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Document metadata"
+          },
+          "locale": {
+            "type": "string",
+            "enum": ["en", "es", "fr", "de"]
+          },
+          "version": {
+            "type": "string",
+            "enum": ["v1", "v2", "v3"]
+          }
+        }
+      },
+      "SearchResult": {
+        "type": "object",
+        "required": ["slug", "title"],
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "Feedback": {
+        "type": "object",
+        "required": ["content"],
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Feedback message"
+          },
+          "page": {
+            "type": "string",
+            "description": "Page where feedback was submitted"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Optional user email"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "nextdocs",
+  "version": "1.0.0",
+  "description": "High-performance multi-language documentation portal",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "next": "^14.0.0",
+    "next-i18next": "^14.0.0",
+    "i18next": "^23.0.0",
+    "flexsearch": "^0.7.31",
+    "swagger-ui-react": "^5.10.0",
+    "zustand": "^4.4.0",
+    "lucide-react": "^0.294.0",
+    "gray-matter": "^4.0.3",
+    "react-markdown": "^9.0.0",
+    "remark-gfm": "^4.0.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.0",
+    "postcss": "^8.4.0",
+    "autoprefixer": "^10.4.0",
+    "eslint": "^8.54.0",
+    "eslint-config-next": "^14.0.0",
+    "@testing-library/react": "^14.1.0",
+    "@testing-library/jest-dom": "^6.1.0",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}
