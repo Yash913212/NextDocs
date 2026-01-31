@@ -32,10 +32,13 @@ COPY --from=builder /app/package-lock.json* ./
 # Install only production dependencies
 RUN npm ci --legacy-peer-deps --only=production
 
-# Copy built application from builder
+# Copy built application and required source files from builder
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/lib ./lib
+COPY --from=builder /app/components ./components
+COPY --from=builder /app/app ./app
 
 # Expose port
 EXPOSE 3000

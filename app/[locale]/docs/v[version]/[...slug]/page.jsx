@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { getDoc, getDocSlugs, getAvailableVersions, getAvailableLocales } from '@/lib/docs'
 import { TableOfContents } from '@/components/TableOfContents'
 import { CodeBlock } from '@/components/CodeBlock'
@@ -66,7 +67,7 @@ function createMarkdownComponents(content) {
 
 export async function generateStaticParams() {
   const locales = getAvailableLocales()
-  const versions = getAvailableVersions().map((version) => version.replace(/^v/, '') || version)
+  const versions = getAvailableVersions() // Use versions as-is (with 'v' prefix)
   const params = []
 
   for (const locale of locales) {
