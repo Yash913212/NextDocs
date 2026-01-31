@@ -67,16 +67,18 @@ function createMarkdownComponents(content) {
 
 export async function generateStaticParams() {
   const locales = getAvailableLocales()
-  const versions = getAvailableVersions() // Use versions as-is (with 'v' prefix)
+  const versions = getAvailableVersions() // returns folders like 'v1', 'v2'
   const params = []
 
   for (const locale of locales) {
     for (const version of versions) {
+      // strip leading 'v' so Next's route segment v[version] becomes /v1 (version === '1')
+      const paramVersion = version.replace(/^v/, '')
       const slugs = getDocSlugs(locale, version)
       slugs.forEach((slug) => {
         params.push({
           locale,
-          version,
+          version: paramVersion,
           slug: [slug],
         })
       })
