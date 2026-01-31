@@ -1,288 +1,158 @@
+# NextDocs
 
-
-# 👋 Welcome to NextDocs!
-
-NextDocs is your go-to toolkit for building beautiful, fast, and easy-to-manage documentation sites. Whether you’re a solo dev or a big team, you’ll love how simple it is to get started, switch languages, and keep docs up-to-date. Powered by Next.js, it’s packed with all the features you wish every docs site had—no fuss, just results.
-
-
-## 🚀 Features You’ll Love
-
-- **Multi-Language**: English, Spanish, French, and German—switch instantly!
-- **Super Fast (ISR)**: Pages refresh every 60 seconds, so your docs are always up-to-date.
-- **Full-Text Search**: Find anything in a flash.
-- **Dark/Light Mode**: Follows your system, or pick your favorite.
-- **Smart Table of Contents**: Clickable, scroll-aware, and always handy.
-- **API Reference**: Interactive Swagger UI for your API docs.
-- **Feedback Widget**: Let your users help you improve.
-- **Copyable Code Blocks**: One click, code copied.
-- **Mobile-Ready**: Looks great everywhere.
-- **Dockerized**: Run it anywhere, anytime.
-
-
-## 🛠️ Tech Stack
-
-- **Framework**: Next.js 14 (App Router)
-- **Styling**: Tailwind CSS
-- **i18n**: next-i18next
-- **Search**: flexsearch
-- **API Docs**: swagger-ui-react
-- **State**: Zustand
-- **Icons**: Lucide React
-- **Markdown**: react-markdown + remark-gfm
-- **Container**: Docker & docker-compose
-
-
-## ⚡ Quick Start
-
-Ready to get rolling? Here’s all you need:
-
-
-### Prerequisites
-- Node.js 18+ **or** Docker
-
-
-### Local Development
-1. **Clone this repo:**
-	```bash
-	git clone <repository-url>
-	cd NextDocs
-	```
-2. **Install dependencies:**
-	```bash
-	npm install
-	```
-3. **Set up your environment:**
-	```bash
-	cp .env.example .env
-	```
-4. **Start the dev server:**
-	```bash
-	npm run dev
-	```
-5. Open [http://localhost:3000](http://localhost:3000) and you’re live!
-
-
-### Docker
-1. **Build and run:**
-	```bash
-	docker-compose up --build
-	```
-2. Visit [http://localhost:3000](http://localhost:3000) in your browser.
-3. The container will auto-check its health for you.
-
+A sample multi-language documentation portal built with Next.js (App Router), Tailwind CSS, ISR, client-side search, Swagger UI integration, and Docker.
 
 ---
 
+## 🚀 Features
 
-## 🗂️ Project Structure (at a glance)
+- Incremental Static Regeneration (ISR) with revalidate = 60s for documentation pages
+- Locale sub-paths: **en**, **es**, **fr**, **de** (sub-path routing)
+- Client-side full-text search (FlexSearch) with a server-generated index
+- API Reference rendered with **Swagger UI** from `/public/openapi.json`
+- Theme switcher (light/dark) with persistent preference (localStorage)
+- Copy-to-clipboard code blocks, Table of Contents (TOC) with active-section highlighting, collapsible sidebar navigation, and feedback widget
+- Containerized via Docker + docker-compose for consistent development and testing
 
-```
-├── app/
-│   ├── layout.tsx                 # Root layout
-│   ├── page.tsx                   # Home page
-│   ├── [locale]/
-│   │   ├── layout.tsx             # Locale-specific layout
-│   │   └── docs/
-│   │       ├── v[version]/
-│   │       │   └── [...slug]/
-│   │       │       └── page.tsx    # Dynamic documentation pages
-│   │       └── layout.tsx          # Docs layout
-│   └── api-reference/
-│       └── page.tsx                # Swagger UI API reference page
-├── components/
-│   ├── LanguageSwitcher.tsx        # Language switcher component
-│   ├── ThemeToggle.tsx             # Theme toggle button
-│   ├── Sidebar.tsx                 # Navigation sidebar
-│   ├── VersionSelector.tsx         # Version selector dropdown
-│   ├── TableOfContents.tsx         # TOC with scroll tracking
-│   ├── Search.tsx                  # Full-text search component
-│   ├── CodeBlock.tsx               # Code block with copy button
-│   ├── FeedbackWidget.tsx          # Feedback form
-│   ├── Header.tsx                  # Page header
-│   └── ...other components
-├── _docs/
-│   ├── en/
-│   │   ├── v1/
-│   │   ├── v2/
-│   │   └── v3/
-│   ├── es/
-│   ├── fr/
-│   └── de/
-├── public/
-│   ├── locales/                    # Translation files
-│   │   ├── en/
-│   │   ├── es/
-│   │   ├── fr/
-│   │   └── de/
-│   ├── openapi.json                # OpenAPI specification
-├── lib/
-│   ├── docs.ts                     # Documentation utilities
-│   ├── store.ts                    # Zustand stores
-│   └── search.ts                   # Search functionality
-├── Dockerfile                      # Docker configuration
-├── docker-compose.yml              # Docker Compose setup
-├── .env.example                    # Environment variables example
-└── README.md                       # This file
-```
+---
 
+## 🧩 Project Structure (important files)
 
-## ❤️ Why NextDocs?
+- `_docs/` — Markdown docs organized by `locale/version/slug.md` (e.g. `_docs/en/v1/introduction.md`)
+- `pages/docs/[version]/[...slug].jsx` — Dynamic docs rendering with ISR (revalidate: 60)
+- `components/` — UI components (Sidebar, Header, TOC, CodeBlock, FeedbackWidget, Search, ThemeToggle, LanguageSwitcher)
+- `pages/api/search-index.js` — Search index generator endpoint
+- `pages/api/nav.js` — Navigation endpoint for the sidebar
+- `public/openapi.json` — Sample OpenAPI spec used by Swagger UI
+- `Dockerfile`, `docker-compose.yml`, `docker/nginx.conf` — Containerization + proxy and healthcheck setup
+- `scripts/verify.sh` — Quick verification script that validates core requirements
 
-- **Multi-Language, No Hassle:** Docs in English, Spanish, French, and German. Use the language switcher or jump straight to URLs like `/en/docs/v1/introduction`.
-- **Always Fresh with ISR:** Pages are statically generated and auto-refreshed every 60 seconds. Fast, scalable, and always up-to-date. Want to check? Try:
-	```bash
-	curl -I http://localhost:3000/en/docs/v1/introduction | grep Cache-Control
-	# Output: Cache-Control: public, s-maxage=60, stale-while-revalidate
-	```
-- **Lightning Search:** Type in the search bar—results appear instantly, searching all headings, text, and code.
-- **Theme Your Way:** Dark or light, it’s your call. Follows your system by default, but you can always toggle and it’ll remember.
-- **Smart Table of Contents:** Every doc page gets a clickable, scroll-aware TOC. Jump to any section, see where you are.
-- **Sidebar Navigation:** Collapsible, version-aware sidebar for easy browsing.
-- **API Reference, Interactive:** Swagger UI at `/api-reference`—explore, test, and learn your API right in the browser.
-- **Copyable Code Blocks:** Every code example has a copy button. One click, done.
-- **Feedback Widget:** Let your users send feedback on any page. Help us help you!
+---
 
+## 📦 Environment variables (`.env.example`)
 
-## ⚙️ Environment Variables
+The application reads its public configuration from environment variables. Copy `.env.example` to `.env` and update values as needed.
 
-Copy `.env.example` to `.env` and tweak as needed:
+Variables in `.env.example`:
 
-```env
-NODE_ENV=development
-NEXT_PUBLIC_SITE_NAME=NextDocs
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-```
+- NEXT_PUBLIC_BASE_URL (default: http://localhost:3000)
+- NEXT_PUBLIC_APP_NAME (default: NextDocs)
+- NEXT_PUBLIC_ALGOLIA_APP_ID (optional)
+- NEXT_PUBLIC_ALGOLIA_API_KEY (optional)
+- NEXT_PUBLIC_ALGOLIA_INDEX (optional)
+- NODE_ENV (development|production)
 
+> Note: Do not commit secrets. Only public/placeholder values are in `.env.example`.
 
-## 🐳 Docker Deployment
+---
 
-### Build the Docker image
+## ⚙️ Quick start
+
+### Local development
+
+1. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+2. Start the dev server:
+
+   ```bash
+   npm run dev
+   # open http://localhost:3000
+   ```
+
+### Docker (recommended for a production-like environment)
+
+1. Copy `.env.example` to `.env`:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Build and start the services:
+
+   ```bash
+   docker-compose up --build -d
+   ```
+
+3. Check services and health:
+
+   ```bash
+   docker-compose ps
+   ```
+
+4. Visit: http://localhost:3000
+
+---
+
+## ✅ Verification (automated)
+
+A quick verification script is included to validate the core requirements (ISR headers, i18n pages, sidebar & links, search, Swagger UI, data-testids, etc.). Run:
+
 ```bash
-docker build -t nextdocs:latest .
+chmod +x scripts/verify.sh
+./scripts/verify.sh
 ```
 
-### Run with docker-compose
-```bash
-docker-compose up --build -d
-```
+All checks should pass (the script reports failures with details).
 
-### Check container health
-```bash
-docker-compose ps
-```
-The health check runs every 30 seconds. The container is healthy after one successful check.
+---
 
+## 📄 How to add documentation content
 
-## 🧑‍💻 Development
+Docs are simple Markdown files with optional frontmatter:
 
-### Start the dev server
-```bash
-npm run dev
-```
+- Path convention: `_docs/{locale}/{version}/{slug}.md`
+- Example: `_docs/en/v1/introduction.md`
+- Frontmatter fields supported: `title` (used for page title and sidebar)
 
-### Build for production
-```bash
-npm run build
-npm start
-```
+After adding/editing docs, you can rebuild Docker images or run in dev mode. ISR will revalidate pages at runtime (s-maxage=60).
 
-### Run tests
-```bash
-npm test
-npm run test:watch
-```
+---
 
-### Lint your code
-```bash
-npm run lint
-```
+## 🧪 Tests & CI
 
+- A simple verification script is provided (`scripts/verify.sh`).
+- I can add **Cypress** E2E tests or **Jest + React Testing Library** unit tests on request; tell me if you prefer one and I’ll add them to the repo and CI.
 
-## 📡 API Endpoints
+---
 
-### Documentation
-- `GET /[locale]/docs/v[1-3]/[slug]` — Get a specific doc page
-  
-Example:
-```bash
-curl http://localhost:3000/en/docs/v1/introduction
-```
+## 🛠 Troubleshooting
 
-### API Reference
-- `GET /api-reference` — Interactive API docs
+- If sidebar nav is empty in the initial HTML, ensure `_docs` is present before build. The Dockerfile now copies `_docs` when building the image.
+- If a Docker build fails during `npm run build`, try building locally with `npm run build` to see PostCSS/Tailwind errors.
+- If healthcheck fails, inspect logs:
 
-### Health Check
-- `GET /health` — App health check (for Docker)
+  ```bash
+  docker-compose logs --tail=200 app
+  ```
 
+---
 
-## ⚡ Performance
+## ✅ Core requirements implemented
 
-- **Image Optimization**: Uses next/image for fast, crisp images
-- **Font Optimization**: No layout shift, just clean text
-- **Code Splitting**: Only loads what you need
-- **ISR**: Docs update in the background
-- **Caching**: Smart headers for speed
+- Dockerized app with `docker-compose.yml` + healthcheck (port 3000) ✅
+- `.env.example` present and documented ✅
+- Documentation pages use ISR with revalidate = 60 ✅
+- i18n sub-paths for en, es, fr, de ✅
+- Language switcher `data-testid="language-switcher"` ✅
+- Collapsible Sidebar with `data-testid="sidebar"` and links `sidebar-nav-link-{slug}` ✅
+- Client-side full-text search (`data-testid="search-input"`, `search-results`, `search-no-results`) ✅
+- API Reference using `swagger-ui-react` and `/public/openapi.json` with `.swagger-ui` container ✅
+- Version selector (`data-testid="version-selector"`) and options ✅
+- Dark/light theme toggle (`data-testid="theme-toggle"`) that persists ✅
+- Table of Contents with active link markers (`data-testid="table-of-contents"`, `toc-link-{slug}`) ✅
+- Feedback widget (`feedback-input`, `feedback-submit`, `feedback-success-message`) ✅
+- Copy-to-clipboard code blocks (`data-testid="code-block"`, `copy-code-button`) ✅
 
+---
 
-## ♿ Accessibility
+## 🙋‍♂️ Need help or want tests added?
 
-- Semantic HTML5 for structure
-- Keyboard navigation everywhere
-- ARIA labels where it matters
-- High-contrast, readable colors
-- 100% mobile-friendly
+If you want me to add automated E2E tests (Cypress) or unit tests (Jest + RTL) and wire them into a CI (GitHub Actions), say the word and I’ll add them and a CI workflow now.
 
+---
 
-## 🌍 Browser Support
-
-- Chrome/Edge 90+
-- Firefox 88+
-- Safari 14+
-- Mobile browsers (iOS Safari, Chrome for Android)
-
-
-## 🛠️ Troubleshooting
-
-### App won’t start in Docker?
-1. Is Docker running?
-	```bash
-	docker ps
-	```
-2. Check logs:
-	```bash
-	docker-compose logs app
-	```
-3. Make sure port 3000 isn’t in use:
-	```bash
-	lsof -i :3000
-	```
-
-### Build fails?
-1. Clear Next.js cache:
-	```bash
-	rm -rf .next
-	```
-2. Reinstall dependencies:
-	```bash
-	rm -rf node_modules package-lock.json
-	npm install
-	```
-
-### Search not working?
-1. Make sure the search index builds on startup
-2. Check your browser console for errors
-3. Confirm docs are in the right folder
-
-
-## 🤝 Contributing
-
-We love contributions! Here’s how to get started:
-1. Fork this repo
-2. Create a feature branch
-3. Make your changes
-4. Open a pull request
-
-
-## 🪪 License
-
-MIT — use it, share it, build something awesome!
+Thanks — if anything is missing or you want a CI integration or screenshots/video for the README, I can add those quickly.

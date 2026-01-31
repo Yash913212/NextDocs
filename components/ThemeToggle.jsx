@@ -1,47 +1,30 @@
-'use client'
+import { useEffect, useState } from 'react'
 
-import { useThemeStore } from '@/lib/store'
-import { useEffect } from 'react'
-import { Moon, Sun } from 'lucide-react'
-
-export function ThemeToggle() {
-  const { isDark, setIsDark } = useThemeStore()
+export default function ThemeToggle() {
+  const [isDark, setIsDark] = useState(false)
 
   useEffect(() => {
-    // Check system preference on mount
-    if (typeof window !== 'undefined') {
-      const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
-      const stored = localStorage.getItem('theme-storage')
-      if (!stored) {
-        setIsDark(isDarkMode)
-      }
-    }
-  }, [setIsDark])
-
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add('dark')
+    const stored = typeof window !== 'undefined' && localStorage.getItem('theme')
+    if (stored) {
+      setIsDark(stored === 'dark')
+      document.documentElement.classList.toggle('dark', stored === 'dark')
     } else {
-      document.documentElement.classList.remove('dark')
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      setIsDark(prefersDark)
+      document.documentElement.classList.toggle('dark', prefersDark)
     }
-  }, [isDark])
+  }, [])
 
-  const toggleTheme = () => {
-    setIsDark(!isDark)
+  function toggle() {
+    const next = !isDark
+    setIsDark(next)
+    document.documentElement.classList.toggle('dark', next)
+    localStorage.setItem('theme', next ? 'dark' : 'light')
   }
 
   return (
-    <button
-      onClick={toggleTheme}
-      data-testid="theme-toggle"
-      className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-    >
-      {isDark ? (
-        <Sun className="w-5 h-5 text-yellow-500" />
-      ) : (
-        <Moon className="w-5 h-5 text-gray-700" />
-      )}
+    <button data-testid="theme-toggle" onClick={toggle} className="p-2">
+      {isDark ? '🌙' : '☀️'}
     </button>
   )
 }

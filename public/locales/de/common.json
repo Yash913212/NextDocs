@@ -1,28 +1,10 @@
 {
-  "common": {
-    "language": "Sprache",
-    "english": "English",
-    "spanish": "Español",
-    "french": "Français",
-    "german": "Deutsch",
-    "theme": "Thema",
-    "light": "Hell",
-    "dark": "Dunkel",
-    "search": "Suchen",
-    "version": "Version",
-    "navigation": "Navigation",
-    "noResults": "Keine Ergebnisse gefunden",
-    "home": "Startseite",
-    "docs": "Dokumentation",
-    "apiReference": "API-Referenz",
-    "feedback": "Feedback",
-    "submit": "Absenden",
-    "success": "Erfolg",
-    "error": "Fehler",
-    "close": "Schließen",
-    "open": "Öffnen",
-    "copy": "Kopieren",
-    "copied": "Kopiert!",
-    "editOnGithub": "Auf GitHub bearbeiten"
-  }
+  "search": "Suchen",
+  "edit_this_page": "Diese Seite bearbeiten",
+  "dark_mode": "Dunkelmodus",
+  "light_mode": "Hellmodus",
+  "feedback_placeholder": "Teilen Sie Ihr Feedback...",
+  "submit": "Absenden",
+  "version": "Version",
+  "language": "Sprache"
 }

@@ -1,28 +1,10 @@
 {
-  "common": {
-    "language": "Language",
-    "english": "English",
-    "spanish": "Español",
-    "french": "Français",
-    "german": "Deutsch",
-    "theme": "Theme",
-    "light": "Light",
-    "dark": "Dark",
-    "search": "Search",
-    "version": "Version",
-    "navigation": "Navigation",
-    "noResults": "No results found",
-    "home": "Home",
-    "docs": "Documentation",
-    "apiReference": "API Reference",
-    "feedback": "Feedback",
-    "submit": "Submit",
-    "success": "Success",
-    "error": "Error",
-    "close": "Close",
-    "open": "Open",
-    "copy": "Copy",
-    "copied": "Copied!",
-    "editOnGithub": "Edit on GitHub"
-  }
+  "search": "Search",
+  "edit_this_page": "Edit this page",
+  "dark_mode": "Dark mode",
+  "light_mode": "Light mode",
+  "feedback_placeholder": "Share feedback...",
+  "submit": "Submit",
+  "version": "Version",
+  "language": "Language"
 }

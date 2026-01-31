@@ -1,0 +1,64 @@
+/* Custom visual tweaks for NextDocs */
+
+/* Make main container a bit wider and give comfortable vertical spacing */
+.container {
+  @apply mx-auto max-w-6xl px-6 py-8;
+}
+
+/* Ensure header and sidebar contrast well in dark mode */
+header {
+  @apply bg-white dark:bg-gray-800;
+}
+
+aside[data-testid="sidebar"] {
+  @apply bg-gray-50 dark:bg-gray-900;
+}
+
+/* Prose adjustments when typography plugin is active: only adjust max-width and color via utilities */
+.prose {
+  max-width: none;
+}
+
+html.dark .prose {
+  /* rely on the plugin's prose-invert utility via classes in markup */
+}
+
+/* Improve search results z-index and background for visibility */
+[data-testid="search-results"] {
+  @apply bg-white dark:bg-gray-800 z-50;
+}
+
+/* Slight tweak for code blocks to stand out */
+[data-testid="code-block"] pre {
+  @apply bg-gray-100 dark:bg-gray-800 p-4 rounded;
+}
+
+/* Sidebar link hover/transition and improved contrast */
+aside[data-testid="sidebar"] a {
+  @apply transition-colors duration-150;
+}
+
+/* Header alignment and spacing */
+.site-header {
+  @apply flex items-center justify-between px-4 py-3 bg-[#071029] dark:bg-[#071529];
+}
+.site-header .header-controls > * {
+  @apply mx-1;
+}
+
+/* Roomier hero headings */
+main > h1, main h1 {
+  @apply mt-0 mb-4 text-3xl;
+}
+
+/* Focus ring fallback for search input */
+[data-testid="search-input"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+  border-color: rgba(99,102,241,0.6);
+}
+
+/* Slight typographic tuning for sidebar title */
+aside[data-testid="sidebar"] .text-gray-100 {
+  @apply tracking-tight;
+}

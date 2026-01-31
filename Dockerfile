@@ -1,51 +1,25 @@
-# Multi-stage Dockerfile for Next.js application
-
-# Stage 1: Build stage
-FROM node:20-alpine AS builder
-
+# Multi-stage Dockerfile
+FROM node:18-alpine AS builder
 WORKDIR /app
-
-# Copy package files
 COPY package.json package-lock.json* ./
-
-# Install dependencies
-RUN npm ci --legacy-peer-deps
-
-# Copy application code
+RUN npm install --silent --no-audit --no-fund
+# Ensure docs are explicitly copied so they exist at build time
+COPY _docs ./_docs
 COPY . .
-
-# Build Next.js application
 RUN npm run build
 
-# Stage 2: Runtime stage
-FROM node:20-alpine
-
+FROM node:18-alpine AS runner
 WORKDIR /app
-
-# Install curl for healthcheck
+ENV NODE_ENV=production
+# Install runtime deps required by healthcheck and runtime
 RUN apk add --no-cache curl
 
-# Copy package files from builder
-COPY --from=builder /app/package.json package.json
-COPY --from=builder /app/package-lock.json* ./
-
-# Install only production dependencies
-RUN npm ci --legacy-peer-deps --only=production
-
-# Copy built application and required source files from builder
+# Copy only the files needed to run
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/_docs ./_docs
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/next.config.js ./
-COPY --from=builder /app/lib ./lib
-COPY --from=builder /app/components ./components
-COPY --from=builder /app/app ./app
-
-# Expose port
+COPY --from=builder /app/next.config.js ./next.config.js
 EXPOSE 3000
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --retries=5 --start-period=30s \
-  CMD curl -f http://localhost:3000 || exit 1
-
-# Start application
 CMD ["npm", "start"]
